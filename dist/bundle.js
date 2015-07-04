@@ -63,12 +63,12 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _srcTree = __webpack_require__(2);
+	var _srcAVLTree = __webpack_require__(2);
 
-	var _srcTree2 = _interopRequireDefault(_srcTree);
+	var _srcAVLTree2 = _interopRequireDefault(_srcAVLTree);
 
-	var value = new _srcTree2['default']().value;
-	exports.value = value;
+	var AVLTree = _srcAVLTree2['default'];
+	exports.AVLTree = AVLTree;
 
 /***/ },
 /* 2 */
@@ -86,13 +86,26 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Tree = function Tree() {
-	  _classCallCheck(this, Tree);
+	var AVLTree = function AVLTree(compare) {
+	  _classCallCheck(this, AVLTree);
 
-	  this.value = 123;
-	};
+	  // Build a compare function that can handle nodes, null nodes are treated
+	  // as positive infinity
+	  this._compare = function (n1, n2) {
+	    if (n1 && n2) {
+	      return compare(n1.value, n2.value);
+	    } else if (n1) {
+	      return -1;
+	    } else {
+	      return 1;
+	    }
+	  };
+	}
 
-	exports["default"] = Tree;
+	// TODO: Implement the avl tree
+	;
+
+	exports["default"] = AVLTree;
 	module.exports = exports["default"];
 
 /***/ }

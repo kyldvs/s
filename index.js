@@ -2,6 +2,6 @@
  * @flow
  */
 
-import Tree from './src/Tree';
+import src_AVLTree from './src/AVLTree';
 
-export var value = new Tree().value;
+export var AVLTree = src_AVLTree;
