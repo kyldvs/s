@@ -1,23 +1,13 @@
 /**
- * @flow
+ * @providesModule AVLTree
  */
 
-type Node<T> = {
-  bf: number,
-  height: number,
-  size: number,
+'use strict';
 
-  left: Node<T>,
-  right: Node<T>,
+import invariant from './utils/invariant';
 
-  value: T,
-};
-
-export default class AVLTree<T> {
-  _compare: (one: ?Node<T>, two: ?Node<T>) => number;
-  _root: ?Node<T>;
-
-  constructor(compare: (one: T, two: T) => number) {
+export default class AVLTree {
+  constructor(compare) {
     // Build a compare function that can handle nodes, null nodes are treated
     // as positive infinity
     this._compare = (n1, n2) => {
@@ -31,5 +21,11 @@ export default class AVLTree<T> {
     };
   }
 
-  // TODO: Implement the avl tree
+  at(index) {
+    invariant(false);
+  }
+
+  get(index) {
+    invariant(false);
+  }
 }

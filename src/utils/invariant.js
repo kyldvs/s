@@ -1,5 +1,5 @@
 /**
- * @flow
+ * @providesModule invariant
  */
 
 'use strict';
@@ -10,16 +10,12 @@
  * Provide sprintf-style format (only %s is supported) and arguments to provide
  * information about what broke and what you were expecting.
  */
-export default function(
-  condition: mixed,
-  format: string,
-  ...args: Array<any>
-): void {
+export default function(condition, format, ...args) {
   if (!condition) {
     var index = 0;
     var message = format.replace(/%s/g, () => args[index++]);
     var error = new Error('Invariant Violation: ' + message);
-    (error: any).framesToPop = 1;
+    error.framesToPop = 1;
     throw error;
   }
 }

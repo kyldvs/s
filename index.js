@@ -1,7 +1,14 @@
 /**
- * @flow
+ * @providesModule s
  */
 
-import src_AVLTree from './src/AVLTree';
+'use strict';
 
-export var AVLTree = src_AVLTree;
+import AVLTree from './src/AVLTree';
+export {AVLTree};
+
+import maxFlow from './src/maxFlow';
+export {maxFlow};
+
+import floydWarshall from './src/floydWarshall';
+export {floydWarshall};
