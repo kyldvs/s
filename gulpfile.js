@@ -17,6 +17,12 @@ gulp.task('build', function(callback) {
             test: /\.js$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
+            query: {
+              optional: [
+                'es7.exportExtensions',
+                'es7.trailingFunctionCommas',
+              ],
+            },
           },
         ],
       },

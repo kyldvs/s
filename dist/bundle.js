@@ -67,16 +67,24 @@
 
 	var _srcAVLTree2 = _interopRequireDefault(_srcAVLTree);
 
-	var _srcMaxFlow = __webpack_require__(4);
+	exports.AVLTree = _srcAVLTree2['default'];
+
+	var _srcDisjointSet = __webpack_require__(4);
+
+	var _srcDisjointSet2 = _interopRequireDefault(_srcDisjointSet);
+
+	exports.DisjointSet = _srcDisjointSet2['default'];
+
+	var _srcMaxFlow = __webpack_require__(5);
 
 	var _srcMaxFlow2 = _interopRequireDefault(_srcMaxFlow);
 
-	var _srcFloydWarshall = __webpack_require__(5);
+	exports.maxFlow = _srcMaxFlow2['default'];
+
+	var _srcFloydWarshall = __webpack_require__(6);
 
 	var _srcFloydWarshall2 = _interopRequireDefault(_srcFloydWarshall);
 
-	exports.AVLTree = _srcAVLTree2['default'];
-	exports.maxFlow = _srcMaxFlow2['default'];
 	exports.floydWarshall = _srcFloydWarshall2['default'];
 
 /***/ },
@@ -181,6 +189,181 @@
 /***/ function(module, exports) {
 
 	/**
+	 * @providesModule DisjointSet
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var DisjointSet = (function () {
+
+	  /**
+	   * Create a disjoint set out of the given elements. Initially each element is
+	   * its own set.
+	   */
+
+	  function DisjointSet(iterable) {
+	    _classCallCheck(this, DisjointSet);
+
+	    this._parent = new Map();
+	    this._rank = new Map();
+	    this._sets = 0;
+	    if (iterable) {
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+
+	      try {
+	        for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var x = _step.value;
+
+	          this.add(x);
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator['return']) {
+	            _iterator['return']();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	    }
+	  }
+
+	  _createClass(DisjointSet, [{
+	    key: 'add',
+
+	    /**
+	     * Add the element x to this disjoint set structure as its own set. This is a
+	     * no-op if the set already contains x.
+	     */
+	    value: function add(x) {
+	      if (this.has(x)) {
+	        return;
+	      }
+	      this._parent.set(x, x);
+	      this._rank.set(x, 0);
+	      this._sets += 1;
+	    }
+	  }, {
+	    key: 'has',
+
+	    /**
+	     * Check if this structure knows about the element x
+	     */
+	    value: function has(x) {
+	      return this._parent.has(x);
+	    }
+	  }, {
+	    key: 'sameSet',
+
+	    /**
+	     * Check if x and y are in the same set
+	     */
+	    value: function sameSet(x, y) {
+	      return this.has(x) && this.has(y) && this._root(x) === this._root(y);
+	    }
+	  }, {
+	    key: 'union',
+
+	    /**
+	     * Union the sets x and y are in to create one set
+	     */
+	    value: function union(x, y) {
+	      if (!this.has(x) || !this.has(y)) {
+	        return;
+	      }
+
+	      var xRoot = this._root(x);
+	      var yRoot = this._root(y);
+	      if (xRoot !== yRoot) {
+	        // merge by rank
+	        var xRank = this._rank.get(xRoot);
+	        var yRank = this._rank.get(yRoot);
+	        if (xRank < yRank) {
+	          this._parent.set(xRoot, yRoot);
+	        } else if (yRank < xRank) {
+	          this._parent.set(yRoot, xRoot);
+	        } else {
+	          this._parent.set(xRoot, yRoot);
+	          this._rank(xRoot, xRank + 1);
+	        }
+	        this._sets -= 1;
+	      }
+	    }
+	  }, {
+	    key: '_root',
+
+	    /**
+	     * This searches for the root of x, compressing the path along the way
+	     */
+	    value: function _root(x) {
+	      if (this._parent.get(x) === x) {
+	        return x;
+	      }
+
+	      // path compression
+	      var root = this._root(this._parent.get(x));
+	      this._parent.set(x, root);
+	      return root;
+	    }
+	  }, {
+	    key: 'size',
+
+	    /**
+	     * How many elements are in this structure
+	     */
+	    get: function get() {
+	      return this._parent.size;
+	    }
+	  }, {
+	    key: 'sets',
+
+	    /**
+	     * How many disjoint sets are in this structure
+	     */
+	    get: function get() {
+	      return this._sets;
+	    }
+	  }], [{
+	    key: 'of',
+
+	    /**
+	     * Static method that lets you create a disjoint set using varargs
+	     */
+	    value: function of() {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
+
+	      return new DisjointSet(args);
+	    }
+	  }]);
+
+	  return DisjointSet;
+	})();
+
+	exports['default'] = DisjointSet;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	/**
 	 * @providesModule maxFlow
 	 */
 
@@ -197,7 +380,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	/**

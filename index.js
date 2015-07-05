@@ -4,11 +4,8 @@
 
 'use strict';
 
-import AVLTree from './src/AVLTree';
-export {AVLTree};
+export AVLTree from './src/AVLTree';
+export DisjointSet from './src/DisjointSet';
 
-import maxFlow from './src/maxFlow';
-export {maxFlow};
-
-import floydWarshall from './src/floydWarshall';
-export {floydWarshall};
+export maxFlow from './src/maxFlow';
+export floydWarshall from './src/floydWarshall';
