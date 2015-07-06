@@ -68,7 +68,7 @@ class DisjointSet {
     return (
       this.has(x) &&
       this.has(y) &&
-      this._root(x) === this._root(y)
+      Object.is(this._root(x), this._root(y))
     );
   }
 
@@ -76,13 +76,15 @@ class DisjointSet {
    * Union the sets x and y are in to create one set
    */
   union(x, y) {
+    x = sanitize(x);
+    y = sanitize(y);
     if (!this.has(x) || !this.has(y)) {
       return;
     }
 
     const xRoot = this._root(x);
     const yRoot = this._root(y);
-    if (xRoot !== yRoot) {
+    if (!Object.is(xRoot, yRoot)) {
       // merge by rank
       const xRank = this._rank.get(xRoot);
       const yRank = this._rank.get(yRoot);
@@ -102,7 +104,7 @@ class DisjointSet {
    * This searches for the root of x, compressing the path along the way
    */
   _root(x) {
-    if (this._parent.get(x) === x) {
+    if (Object.is(this._parent.get(x), x)) {
       return x;
     }
 
