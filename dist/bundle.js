@@ -274,7 +274,7 @@
 	     * Check if x and y are in the same set
 	     */
 	    value: function sameSet(x, y) {
-	      return this.has(x) && this.has(y) && this._root(x) === this._root(y);
+	      return this.has(x) && this.has(y) && Object.is(this._root(x), this._root(y));
 	    }
 	  }, {
 	    key: 'union',
@@ -289,7 +289,7 @@
 
 	      var xRoot = this._root(x);
 	      var yRoot = this._root(y);
-	      if (xRoot !== yRoot) {
+	      if (!Object.is(xRoot, yRoot)) {
 	        // merge by rank
 	        var xRank = this._rank.get(xRoot);
 	        var yRank = this._rank.get(yRoot);
@@ -311,7 +311,7 @@
 	     * This searches for the root of x, compressing the path along the way
 	     */
 	    value: function _root(x) {
-	      if (this._parent.get(x) === x) {
+	      if (Object.is(this._parent.get(x), x)) {
 	        return x;
 	      }
 
@@ -372,8 +372,52 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	function maxFlow() {
-	  return 20;
+	/**
+	 * @param s is the source vertex
+	 * @param t is the sink vertex
+	 * @param capacity [u][v] is the capacity of edge u, v, must be an integer
+	 * @return the integral max flow of the graph
+	 */
+	function maxFlow(s, t, capacity) {
+	  var n = capacity.length;
+
+	  // compute adjacency list, array of sets
+	  var adjList = [];
+	  for (var i = 0; i < n; i++) {
+	    adjList.push(new Set());
+	    for (var j = 0; j < n; j++) {
+	      if (i !== j && capacity[i][j] > 0) {
+	        adjList[i].add(j);
+	      }
+	    }
+	  }
+
+	  // residual graph that contains the flows we are using, the capacity of edge
+	  // [u, v] at any point in time is capacity[u][v] - residualGraph[u][v]. Note
+	  // that when pushing flow through the residual graph along edge [u, v] a
+	  // reverse entry is added to the residual graph with the negative flow value.
+	  // So when adding x flow to the edge [u, v] the capacity of [u, v] is
+	  // decreased by x, but the capacity of [v, u] is increased by x (which
+	  // represents taking away the flow that was just added)
+	  var residualGraph = [];
+	  for (var i = 0; i < n; i++) {
+	    residualGraph.push([]);
+	    for (var j = 0; j < n; j++) {
+	      residualGraph[i].push(0);
+	    }
+	  }
+
+	  // bfs to find paths that can increase flow
+	  var result = 0;
+	  var found = true;
+	  while (found) {
+	    found = false;
+	    var minCapacity = Infinity;
+	    var path = [];
+	    // TODO
+	  }
+
+	  return result;
 	}
 
 	exports['default'] = maxFlow;

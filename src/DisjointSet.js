@@ -76,8 +76,6 @@ class DisjointSet {
    * Union the sets x and y are in to create one set
    */
   union(x, y) {
-    x = sanitize(x);
-    y = sanitize(y);
     if (!this.has(x) || !this.has(y)) {
       return;
     }
