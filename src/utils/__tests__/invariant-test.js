@@ -1,7 +1,7 @@
 
-jest.dontMock('../invariant');
+jest.dontMock('invariant');
 
-var invariant = require('../invariant');
+var invariant = require('invariant');
 
 describe('invariant', () => {
   it('throws an error when condition is false', () => {

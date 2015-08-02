@@ -1,35 +1,49 @@
 {
   "name": "s",
-  "version": "0.1.0",
-  "description": "some random code",
+  "version": "0.0.0",
+  "description": "",
   "main": "index.js",
+  "repository": "kyldvs/s",
   "scripts": {
-    "test": "jest"
+    "build": "gulp build",
+    "prepublish": "npm run build",
+    "test": "NODE_ENV=test jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kyldvs/s"
-  },
+  "author": "",
+  "license": "",
   "devDependencies": {
-    "babel-core": "^5.6.15",
-    "babel-jest": "^5.3.0",
-    "babel-loader": "^5.3.0",
-    "gulp": "^3.9.0",
-    "gulp-util": "^3.0.6",
-    "jest": "^0.1.40",
-    "node-libs-browser": "^0.5.2",
-    "webpack": "^1.10.1"
+    "babel": "^5.4.7",
+    "del": "^1.2.0",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.1.0",
+    "gulp-flatten": "0.0.4",
+    "gulp-util": "^3.0.4",
+    "jest-cli": "^0.4.5",
+    "object-assign": "^2.0.0",
+    "run-sequence": "^1.1.0",
+    "through2": "^0.6.5"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "testFileExtensions": [
-      "es6",
-      "js"
+    "modulePathIgnorePatterns": [
+      "/lib/",
+      "/node_modules/"
     ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "es6"
+    "persistModuleRegistryBetweenSpecs": true,
+    "preprocessorIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "rootDir": "",
+    "scriptPreprocessor": "scripts/jest/preprocessor.js",
+    "setupEnvScriptFile": "scripts/jest/environment.js",
+    "testPathDirs": [
+      "<rootDir>/src"
+    ],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/"
     ]
+  },
+  "dependencies": {
+    "core-js": "^1.0.0",
+    "promise": "^7.0.3"
   }
 }

@@ -4,7 +4,7 @@
 
 'use strict';
 
-import invariant from './utils/invariant';
+import invariant from 'invariant';
 
 export default class AVLTree {
   constructor(compare) {

@@ -1,38 +1,61 @@
+var assign = require('object-assign');
 var gulp = require('gulp');
-var gutil = require('gulp-util');
-var path = require('path');
-var webpack = require('webpack');
+var babel = require('gulp-babel');
+var flatten = require('gulp-flatten');
+var del = require('del');
+var runSequence = require('run-sequence');
 
-gulp.task('build', function(callback) {
-  webpack(
-    {
-      entry: [path.resolve(__dirname, 'index.js')],
-      output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
-      },
-      module: {
-        loaders: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-            query: {
-              optional: [
-                'es7.exportExtensions',
-                'es7.trailingFunctionCommas',
-              ],
-            },
-          },
-        ],
-      },
-    },
-    function(err, stats) {
-      if (err) {
-        throw new gutil.PluginError('webpack', err);
-      }
-      gutil.log('[webpack]', stats.toString());
-      callback();
-    }
-  );
+var babelPluginDEV = require('./scripts/babel/dev-expression');
+var babelDefaultOptions = require('./scripts/babel/default-options');
+var gulpModuleMap = require('./scripts/gulp/module-map.js');
+
+var paths = {
+  src: [
+    'src/**/*.js',
+    '!src/**/__tests__/**/*.js',
+    '!src/**/__mocks__/**/*.js'
+  ],
+  lib: 'lib',
+  flowInclude: 'flow/include'
+};
+
+var babelOpts = assign({}, babelDefaultOptions, {
+  plugins: babelDefaultOptions.plugins.concat([
+    babelPluginDEV
+  ])
 });
+
+var moduleMapOpts = {
+  moduleMapFile: './module-map.json',
+  prefix: 's/lib/'
+};
+
+gulp.task('clean', function(cb) {
+  del([paths.lib, paths.flowInclude], cb);
+});
+
+gulp.task('lib', function() {
+  return gulp
+    .src(paths.src)
+    .pipe(gulpModuleMap(moduleMapOpts))
+    .pipe(babel(babelOpts))
+    .pipe(flatten())
+    .pipe(gulp.dest(paths.lib));
+});
+
+gulp.task('flow', function() {
+  return gulp
+    .src(paths.src)
+    .pipe(flatten())
+    .pipe(gulp.dest(paths.flowInclude));
+})
+
+gulp.task('watch', function() {
+  gulp.watch(paths.src, ['lib', 'flow']);
+});
+
+gulp.task('build', function(cb) {
+  runSequence('clean', ['lib', 'flow'], cb);
+});
+
+gulp.task('default', ['build']);

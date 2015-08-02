@@ -1,7 +1,7 @@
 
-jest.dontMock('../floydWarshall');
+jest.dontMock('floydWarshall');
 
-var floydWarshall = require('../floydWarshall');
+var floydWarshall = require('floydWarshall');
 
 describe('floydWarshall', () => {
 
