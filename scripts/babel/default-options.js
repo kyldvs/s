@@ -9,9 +9,11 @@
 
 'use strict';
 
-var babelPluginModules = require('../babel/rewrite-modules');
+var babelPluginModules = require('fbjs/scripts/babel/rewrite-modules');
 
-module.exports = {
+var moduleMap = require('fbjs/module-map');
+
+var babelOpts = {
   nonStandard: true,
   blacklist: [
     'spec.functionName'
@@ -21,8 +23,7 @@ module.exports = {
   ],
   stage: 1,
   plugins: [babelPluginModules],
-  _moduleMap: {
-    'core-js/library/es6/map': 'core-js/library/es6/map',
-    'promise': 'promise',
-  }
+  _moduleMap: moduleMap,
 };
+
+module.exports = babelOpts;
