@@ -10,6 +10,7 @@
 'use strict';
 
 var babelPluginModules = require('fbjs/scripts/babel/rewrite-modules');
+var babelPluginDEV = require('fbjs/scripts/babel/dev-expression');
 
 var moduleMap = require('fbjs/module-map');
 
@@ -22,7 +23,7 @@ var babelOpts = {
     'es6.classes'
   ],
   stage: 1,
-  plugins: [babelPluginModules],
+  plugins: [babelPluginDEV, babelPluginModules],
   _moduleMap: moduleMap,
 };
 

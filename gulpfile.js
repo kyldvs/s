@@ -1,19 +1,10 @@
-var assign = require('object-assign');
 var babel = require('gulp-babel');
 var del = require('del');
 var flatten = require('gulp-flatten');
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 
-var babelPluginDEV = require('fbjs/scripts/babel/dev-expression');
-
-var babelDefaultOptions = require('./scripts/babel/default-options');
-
-var babelOpts = assign({}, babelDefaultOptions, {
-  plugins: babelDefaultOptions.plugins.concat([
-    babelPluginDEV
-  ])
-});
+var babelOpts = require('./scripts/babel/default-options');
 
 var paths = {
   src: [
